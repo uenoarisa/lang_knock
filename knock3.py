@@ -1,42 +1,42 @@
 # # 14. 先頭からN行を出力
-# n =int(input('N: '))
-# with open('popular-names.txt') as f:
-#     for i in range(n):
-#         print(f.readline(), end='')
+n =int(input('N: '))
+with open('popular-names.txt') as f:
+    for i in range(n):
+        print(f.readline(), end='')
 
-# # head -n 5 popular-names.txt
-# # tail -n 5 popular-names.txt
+# head -n 5 popular-names.txt
+# tail -n 5 popular-names.txt
 
-# # 15. 末尾のN行を出力
-# n =int(input('N: '))
-# with open('popular-names.txt') as f:
-#     lines = f.readlines()
-#     for line in lines[-n:]:
-#         print(line, end='')
+# 15. 末尾のN行を出力
+n =int(input('N: '))
+with open('popular-names.txt') as f:
+    lines = f.readlines()
+    for line in lines[-n:]:
+        print(line, end='')
 
-# # 16 ファイルをN分割する
-# n =int(input('N: '))
-# with open('popular-names.txt') as f:
-#     lines = f.readlines()
-#     unit = -(-len(lines) // n)  # math.ceil(len(lines) / n)の代わり
-#     for i in range(n):
-#         with open(f'popular-names_{i}.txt', 'w') as f:
-#             f.writelines(lines[i*unit:(i+1)*unit])
+# 16 ファイルをN分割する
+n =int(input('N: '))
+with open('popular-names.txt') as f:
+    lines = f.readlines()
+    unit = -(-len(lines) // n)  # math.ceil(len(lines) / n)の代わり
+    for i in range(n):
+        with open(f'popular-names_{i}.txt', 'w') as f:
+            f.writelines(lines[i*unit:(i+1)*unit])
 # split -l 3 popular-names.txt popular-names_
 # split -l [行数] [入力ファイル] [出力ファイルの接頭辞]
 # -(-len(lines) // n) は切り上げのテクニック
 
 # 17. １列目の文字列の異なり
 # 1列目に現れる文字列の「ユニーク（重複なし）な集合」を求める
-# unique_words = set()
-# # setは集合を表すデータ型で重複を許さない
-# with open ('popular-names.txt') as f:
-#     for line in f:
-#         cols = line.split('\t')
-#         unique_words.add(cols[0])
+unique_words = set()
+# setは集合を表すデータ型で重複を許さない
+with open ('popular-names.txt') as f:
+    for line in f:
+        cols = line.split('\t')
+        unique_words.add(cols[0])
 
-# for word in sorted(unique_words):
-#     print(word)
+for word in sorted(unique_words):
+    print(word)
     #sortedでa,b,cの順番に並び替える 
 # cut -f1 popular-names.txt | sort | uniq
 # cut -f1 popular-names.txt：cutコマンドでファイルの1列目を抽出します（-f1は1列目を意味します）。
@@ -50,10 +50,21 @@ with open('popular-names.txt') as f:
 
 with open('sorted_popular-names.txt', 'w') as f:
     f.writelines(lines)
-# lines.sort(key=lambda line: int(line.split('\t')[2]), reverse=True)
+lines.sort(key=lambda line: int(line.split('\t')[2]), reverse=True)
 # 意味は、各行をタブで分割し、3列目を数値として取得し、それを降順でソートすること
 
 # sort -k 3 -n -r -t$'\t' popular-names.txt
 # sort -k 3 -n -r -t$'\t' popular-names.txt > sorted_popular-names.txt
 # -k 3：3列目をキーとして指定, -n：数値としてソート, -r：降順でソート -t$'\t'：タブ区切りであることを指定
 
+# 19. 各行の1コラム目の文字列の出現頻度を求め，出現頻度の高い順に並べる
+from collections import Counter
+with open('popular-names.txt') as f:
+    lines = f.readlines()
+    names = [line.split('\t')[0] for line in lines]
+    counter = Counter(names)
+    for name, count in counter.most_common():
+        print(name, count)
+
+# counter = Counter(names) で、リストnamesの要素の出現回数をカウント
+# counter.most_common() で、出現回数の多い順に要素を取得

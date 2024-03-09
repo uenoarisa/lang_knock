@@ -59,4 +59,7 @@ with open('combined.txt', 'w') as combined_file:
     for line1, line2 in zip(col1, col2):
         combined_file.write(f"{line1.strip()}\t{line2}")
 
-
+# コマンド
+# paste col1.txt col2.txt > combined_check.txt
+# diff combined.txt combined_check.txt
+# pasteコマンドとは、ファイルを結合するコマンド
