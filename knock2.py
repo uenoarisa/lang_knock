@@ -14,6 +14,7 @@ print("11",f.read().replace("\t"," "))
 # tr '\t' ' ' < popular-names.txt
 # タブの表現は\t、スペースの表現は\s
 # expandコマンドとは、タブをスペースに変換するコマンド
+# expand -t 1 popular-names.txt
 
 # 12. 1列目をcol1.txtに，2列目をcol2.txtに保存
 # ファイルの読み込み

@@ -1,6 +1,7 @@
 # 00.文字列の逆順
 x = "stressed"
 print("00",x[::-1])
+# x[::-1]は、文字列を逆順にするスライス
 
 #01 「パタトクカシーー」
 x = "パタトクカシーー"
@@ -47,7 +48,13 @@ y = "paragraph"
 X = set(n_gram(x,2))
 Y = set(n_gram(y,2))
 print("06",X.union(Y))
+# 和集合
 print("06",X.intersection(Y))
+# 積集合
+print("06",X.difference(Y))
+# 差集合
+print("06","se" in X)
+print("06","se" in Y)
 
 # 07.テンプレートによる文生成
 def template(x,y,z):
