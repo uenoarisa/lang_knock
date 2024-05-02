@@ -1,3 +1,4 @@
+# 記事から参照されているメディアファイルをすべて抜き出せ．
 import re
 import quiz20 as q20
 
