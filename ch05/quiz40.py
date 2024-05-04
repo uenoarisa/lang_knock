@@ -42,5 +42,5 @@ def parse_morphs(file_path):
 
 if __name__ == '__main__':
     sentences = parse_morphs('../ai.ja.txt.parsed')
-    for morph in sentences[1]:  # 説明文(2段落目)の形態素を表示
+    for morph in sentences[1]:  # 説明文(2個)の形態素を表示
         print(morph.surface,morph.base,morph.pos,morph.pos1)
