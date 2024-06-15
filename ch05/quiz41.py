@@ -11,7 +11,8 @@ class Chunk:
 
 def parse_cabocha(file_path):
     sentences = []
-    chunks = {}
+    chunks = {} #現在の文の文節を保持する辞書。
+    eos_count = 0
     with open(file_path, 'r', encoding='utf-8') as file:
         for line in file:
             if line.startswith('*'):
@@ -22,14 +23,21 @@ def parse_cabocha(file_path):
                     chunks[idx] = Chunk(dst)
                 else:
                     chunks[idx].dst = dst
+                # 文節が既存でない場合、新しいChunkオブジェクトを作成。既に存在する場合、dstを更新。
                 if dst != -1:
                     if dst not in chunks:
                         chunks[dst] = Chunk(None)
                     chunks[dst].srcs.append(idx)
+
             elif line.strip() == 'EOS':
-                if chunks:
-                    sentences.append(list(chunks.values()))
-                    chunks = {}
+                eos_count += 1
+                if eos_count == 2:  # 2回目のEOSが確認されたら文を保存
+                    if chunks:
+                        sentences.append(list(chunks.values()))
+                        chunks = {}
+                    eos_count = 0
+                continue
+                
             else:
                 parts = line.split('\t')
                 if len(parts) == 2:
@@ -39,19 +47,19 @@ def parse_cabocha(file_path):
     return sentences
 
 if __name__ == '__main__':
-    sentences = parse_cabocha('../ai.ja.txt.parsed')
-    for chunk in sentences[1]:
-        # 文節の形態素（Morphオブジェクト）のリストを表示
-        print("形態素（Morphオブジェクト）のリスト:")
-        for morph in chunk.morphs:
-            print(f"表層形：{morph.surface} / 基本形：{morph.base} / 品詞：{morph.pos} / 品詞細分類1：{morph.pos1}")
+    sentences = parse_cabocha('ai.ja.txt.parsed')
+    for i, chunk in enumerate(sentences[1]):  # sentences[0]で最初の文のデータを表示
+        # 現在の文節のテキストを取得（記号を除く）
+        current_chunk_text = ''.join(morph.surface for morph in chunk.morphs if morph.pos != '記号')
         
-        # 係り先文節インデックス番号を表示
-        print(f"係り先文節インデックス番号：{chunk.dst}")
-        
-        # 係り元文節インデックス番号のリストを表示
-        print(f"係り元文節インデックス番号のリスト：{chunk.srcs}")
+        # 係り先文節のテキストを取得
+        if chunk.dst != -1:  # 係り先が存在する場合
+            dst_chunk_text = ''.join(morph.surface for morph in sentences[1][chunk.dst].morphs if morph.pos != '記号')
+            print(f"文節 {i}: {current_chunk_text} -> 係り先文節 {chunk.dst}: {dst_chunk_text}")
+        else:
+            print(f"文節 {i}: {current_chunk_text} -> 係り先文節: なし")
         
         print("-----------------------------")
-    print('=============================')
+
+
         

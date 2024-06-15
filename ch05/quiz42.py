@@ -15,8 +15,6 @@ def extract_dependency(file_path):
     return dependencies
 
 if __name__ == '__main__':
-    sentences = parse_cabocha('../ai.ja.txt.parsed')
-    dependencies = extract_dependency('../ai.ja.txt.parsed')
+    dependencies = extract_dependency('ai.ja.txt.parsed')
     for src, dst in dependencies:
         print(f'{src}\t{dst}')
-    print('-----------------------------')
